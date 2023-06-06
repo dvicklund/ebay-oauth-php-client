@@ -1,56 +1,46 @@
-<?php namespace dvicklund;
+<?php
 
-include_once('Constants.php');
+namespace EbayOauthToken;
 
-class Utilities {
-    /**
-     * Reads a json file at the input `$path` into an associative array and returns it
-     * 
-     * @param string $path
-     * 
-     * @return Array
-     */
-    public static function readJSONFile($path) {
-        $JSONString = file_get_contents($path);
+function readJSONFile($fileName)
+{
+    $resolvedPath = file_exists($fileName) ? $fileName : __DIR__ . '/' . $fileName;
 
-        if (!$JSONString) {
-            throw new \Exception('Error getting file contents');
-        }
-
-        return json_decode($JSONString, true);
+    if (!$resolvedPath) {
+        throw new \Exception("Could not resolve path for configuration file");
     }
 
-    /**
-     * Reads the input $opt (options) associative array and massages into usable credentials object,
-     * returning the modified array.
-     *
-     * @param array $opt
-     * 
-     * @return array
-     */
-    public static function readOptions($opt) {
-        $creds = [];
-        if (!array_key_exists('env', $opt)) {
-            $opt['env'] = PROD_ENV;
-        }
-        $opt['baseUrl'] = $opt['env'] == PROD_ENV ? API_BASE_URI : API_SANDBOX_BASE_URI;
-        $creds[$opt['env']] = $opt;
-
-        return $creds;
+    $fileContents = file_get_contents($resolvedPath);
+    
+    if (!$fileContents) {
+        throw new \Exception("Error attempting to read config data from file path: $resolvedPath");
     }
 
-    /**
-     * Validate parameters and throw exception if any are invalid
-     *
-     * @param string|null $env
-     * @param string|array|null $scopes
-     * @param array $creds
-     * 
-     * @return void
-     */
-    public static function validateParams($env, $scopes, $creds) {
-        if (!$env) throw new \Exception("Environment is required (PRODUCTION | SANDBOX)");
-        if (!$scopes) throw new \Exception("Missing required parameter `scopes`");
-        if (!$creds) throw new \Exception("Credentials not processed correctly");
+    $configData = json_decode($fileContents, true);
+
+    return $configData;
+}
+
+function validateParams($environment, $scopes, $credentials)
+{
+    if (!$environment) {
+        throw new \Exception('Please specify environment - PRODUCTION|SANDBOX');
     }
+    if (!$scopes) {
+        throw new \Exception('Scopes is required');
+    }
+    if (!$credentials) {
+        throw new \Exception('Credentials configured incorrectly');
+    }
+}
+
+function readOptions($options)
+{
+    $credentials = [];
+    if (!isset($options['env'])) {
+        $options['env'] = 'PRODUCTION';
+    }
+    $options['baseUrl'] = $options['env'] === 'PRODUCTION' ? 'api.ebay.com' : 'api.sandbox.ebay.com';
+    $credentials[$options['env']] = $options;
+    return $credentials;
 }
