@@ -1,4 +1,6 @@
-<?php namespace dvicklund;
+<?php 
+
+namespace EbayOauthToken;
 
 // HTTP Header Constants
 const HEADER_CONTENT_TYPE = 'application/x-www-form-urlencoded';

@@ -1,10 +1,10 @@
 <?php
 
-use dvicklund\EbayOauthToken;
+use EbayOauthToken\EbayOauthToken;
 
 // Pass credentials through a config file
 $ebayAuthToken = new EbayOauthToken([
-    'filepath' => 'demo/ebay-config-sample.json',
+    'filePath' => 'demo/ebay-config-sample.json',
 ]);
 
 // Pass credentials through options array
