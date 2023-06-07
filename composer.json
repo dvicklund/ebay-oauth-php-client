@@ -1,4 +1,7 @@
 {
+    "name": "dvicklund/ebay-oauth-php-client",
+    "description": "Enables the simple retreival of an eBay API OAuth token",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "David Vicklund",
@@ -7,6 +10,9 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "php": ">=7.4"
+    },
     "require-dev": {
         "phpunit/phpunit": "^10.1"
     },
