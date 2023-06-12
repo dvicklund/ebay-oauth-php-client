@@ -6,10 +6,6 @@ function readJSONFile($fileName)
 {
     $resolvedPath = file_exists($fileName) ? $fileName : __DIR__ . '/' . $fileName;
 
-    if (!$resolvedPath) {
-        throw new \Exception("Could not resolve path for configuration file");
-    }
-
     $fileContents = file_get_contents($resolvedPath);
     
     if (!$fileContents) {

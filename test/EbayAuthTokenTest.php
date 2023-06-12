@@ -17,6 +17,8 @@ function file_get_contents($filename,
 {
     if (str_contains($filename, 'test.json')) {
         return \file_get_contents($filename, $use_include_path, $context, $offset, $length);
+    } else if (str_contains($filename, 'badpath.json')) {
+        return false;
     } else return json_encode([
         'access_token' => 'QWESJAHS12323OP'
     ]);
@@ -158,6 +160,72 @@ class EbayAuthTokenTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Please specify environment - PRODUCTION|SANDBOX');
         $ebayOauthToken->exchangeCodeForAccessToken(null, '12345ABC');
+    }
+
+    public function testValidateParamsWithoutScopesShouldFail() 
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Scopes is required');
+        $ebayOauthToken->getAccessToken('SANDBOX', 'XXYYZZ1234', null);
+    }
+
+    public function testValidateParamsWithoutCredentialsShouldFail() 
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Credentials configured incorrectly');
+
+        $ebayOauthToken->exchangeCodeForAccessToken("NONEXISTENT", "XXYYZZ1234");
+    }
+
+    public function testReadJSONFileWithInvalidPathShouldFail()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Error attempting to read config data from file path:");
+
+        $ebayOauthToken = new EbayOauthToken(['filePath' => "badpath.json"]);
+    }
+
+    public function testExchangeCodeForAccessToken() 
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $authCode = $ebayOauthToken->getApplicationToken('PRODUCTION');
+
+        $res = $ebayOauthToken->exchangeCodeForAccessToken('PRODUCTION', $authCode);
+
+        $this->assertEquals('QWESJAHS12323OP', json_decode($res)->access_token);
+    }
+
+    public function testGetAccessToken() 
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $res = $ebayOauthToken->getAccessToken('PRODUCTION', 'XXYYZZ1234');
+
+        $this->assertEquals('QWESJAHS12323OP', json_decode($res)->access_token);
+    }
+
+    public function testGetAccessTokenWithoutRefreshTokenShouldFail()
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Refresh token is required, to generate refresh token use exchangeCodeForAccessToken method");
+
+        $ebayOauthToken->getAccessToken('PRODUCTION', null);
+    }
+
+    public function testSetRefreshToken()
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $ebayOauthToken->setRefreshToken('XXYYZZ1234');
+
+        $this->assertEquals('XXYYZZ1234', $ebayOauthToken->getRefreshToken());
     }
 }
 ?>
