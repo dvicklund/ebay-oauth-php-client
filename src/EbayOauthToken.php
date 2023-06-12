@@ -3,7 +3,7 @@
 namespace EbayOauthToken;
 
 require_once 'Request.php';
-require_once "Utilities.php";
+require_once 'Utilities.php';
 
 class EbayOauthToken
 {
