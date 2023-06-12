@@ -75,7 +75,7 @@ class EbayOauthToken
         return postRequest($data, $credentials);
     }
 
-    public function getAccessToken($environment, $refreshToken, $scopes)
+    public function getAccessToken($environment, $refreshToken = null, $scopes = ['https://api.ebay.com/oauth/api_scope'])
     {
         $token = $refreshToken ?: $this->getRefreshToken();
         validateParams($environment, $scopes, $this->credentials);

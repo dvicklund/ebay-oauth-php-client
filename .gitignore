@@ -2,4 +2,5 @@ vendor/
 .vscode/
 composer.lock
 .phpunit.cache/
+testResult/
 
