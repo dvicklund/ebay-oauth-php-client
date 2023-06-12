@@ -2,7 +2,7 @@
 
 namespace EbayOauthToken;
 
-function postRequest($data, $ebayAuthToken)
+function postRequest(string $data, array $ebayAuthToken): string
 {
     $encodedStr = base64_encode("{$ebayAuthToken['clientId']}:{$ebayAuthToken['clientSecret']}");
     $auth = "Basic {$encodedStr}";

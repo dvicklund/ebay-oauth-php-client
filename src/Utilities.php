@@ -2,7 +2,7 @@
 
 namespace EbayOauthToken;
 
-function readJSONFile($fileName)
+function readJSONFile(string $fileName): array
 {
     $resolvedPath = file_exists($fileName) ? $fileName : __DIR__ . '/' . $fileName;
 
@@ -17,7 +17,7 @@ function readJSONFile($fileName)
     return $configData;
 }
 
-function validateParams($environment, $scopes, $credentials)
+function validateParams(string $environment, array $scopes, array $credentials): void
 {
     if (!$environment) {
         throw new \Exception('Please specify environment - PRODUCTION|SANDBOX');
@@ -30,7 +30,7 @@ function validateParams($environment, $scopes, $credentials)
     }
 }
 
-function readOptions($options)
+function readOptions(array $options): array
 {
     $credentials = [];
     if (!isset($options['env'])) {
