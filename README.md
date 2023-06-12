@@ -8,7 +8,10 @@ See: https://developer.ebay.com/api-docs/static/oauth-tokens.html
 
 ## Installation
 
-```// TODO: after uploaded to packagist, should be installed via composer```
+Include in your project via composer: 
+```bash
+$ composer require dvicklund/ebay-oauth-php-client
+```
 
 ## Usage
 
