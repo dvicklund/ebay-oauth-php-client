@@ -17,7 +17,7 @@ function readJSONFile(string $fileName): array
     return $configData;
 }
 
-function validateParams($environment, $scopes, $credentials): void
+function validateParams(mixed $environment, mixed $scopes, mixed $credentials): void
 {
     if (!$environment) {
         throw new \Exception('Please specify environment - PRODUCTION|SANDBOX');
