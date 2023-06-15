@@ -20,6 +20,9 @@ jobs:
         
       - name: Run tests with PHPUnit
         uses: php-actions/phpunit@v3
+        with: 
+          php_extensions: xdebug
+          code_coverage: clover.xml
       
       - name: Make code coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.1
