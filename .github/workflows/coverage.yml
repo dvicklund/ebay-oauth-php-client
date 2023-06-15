@@ -1,15 +1,29 @@
-- name: Check test coverage
-  uses: johanvanhelden/gha-clover-test-coverage-check@v1
-  id: coverage
-  with:
-    percentage: "50"
-    filename: "coverage.xml"
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    types: 
+      - closed
+    branches: [ main ]
+  
+name: Create test coverage badge
+jobs:
+  if-merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test coverage
+        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+        id: coverage
+        with:
+          percentage: "50"
+          filename: "clover.xml"
 
-- name: Generate the badge SVG image
-  uses: emibcn/badge-action@v1
-  id: badge
-  with:
-    label: 'Coverage'
-    status: ${{ steps.coverage.outputs.coverage }}
-    path: ./badges/test-coverage.svg
-    color: ${{ steps.coverage.outputs.coveragelines > 75 && 'green' || 'red' }}
+      - name: Generate the badge SVG image
+        uses: emibcn/badge-action@v1
+        id: badge
+        with:
+          label: 'Coverage'
+          status: ${{ steps.coverage.outputs.coverage }}
+          path: ./badges/test-coverage.svg
+          color: ${{ steps.coverage.outputs.coveragelines > 75 && 'green' || 'red' }}
