@@ -12,6 +12,18 @@ class EbayOauthToken
     private $scope;
     private $refreshToken;
 
+    /**
+     * Create an eBay OAuth instance
+     *
+     * @param array<mixed> $options - Configuration options object
+     * @param string $options->clientId - eBay App ID
+     * @param string $options->clientSecret - eBay CertId
+     * @param string $options->env - Environment (PRODUCTION | SANDBOX)
+     * @param string $options->redirectUri - Redirect url for your eBay app
+     * @param array<string> $options->scopes - Array of scopes -- for details: 
+     *                      https://developer.ebay.com/api-docs/static/oauth-scopes.html
+     * @return EbayOauthToken
+     */
     public function __construct($options = null)
     {
         if (!$options) {
@@ -22,6 +34,13 @@ class EbayOauthToken
         $this->grantType = '';
     }
 
+    /**
+     * Generates an application access token for client credentials grant flow
+     *
+     * @param string $environment - Environment (PRODUCTION | SANDBOX)
+     * @param array<string> $scopes - Array of scopes for which to generate the access token
+     * @return string|null - Returns application token in JSON string, or null on failure
+     */
     public function getApplicationToken($environment, $scopes = ['https://api.ebay.com/oauth/api_scope'])
     {
         validateParams($environment, $scopes, $this->credentials);
@@ -37,6 +56,16 @@ class EbayOauthToken
         return postRequest($data, $this->credentials[$environment]);
     }
 
+    /**
+     * Generates the user consent authorization URL
+     *
+     * @param string $environment - Environment (PRODUCTION | SANDBOX)
+     * @param array<string> $scopes - Array of scopes for which to generate the token
+     * @param array<mixed> $options - Optional config values
+     * @param string $options->state - Custom state falue
+     * @param boolean $options->prompt - Force login flow
+     * @return string - User consent URL
+     */
     public function generateUserAuthorizationUrl($environment, $scopes, $options = null)
     {
         validateParams($environment, $scopes, $this->credentials);
@@ -64,6 +93,13 @@ class EbayOauthToken
         return $baseUrl . '?' . $queryParam;
     }
 
+    /**
+     * Exchanges an authorization code for an access token
+     *
+     * @param string $environment - Environment (PRODUCTION | SANDBOX)
+     * @param string $code - Authorization code generated from browser using generateUserAuthorizationUrl()
+     * @return string|null - Returns access token in JSON string form on success, or null on failure
+     */
     public function exchangeCodeForAccessToken($environment, $code)
     {
         if (!$code) {
@@ -75,6 +111,14 @@ class EbayOauthToken
         return postRequest($data, $credentials);
     }
 
+    /**
+     * Uses a refresh token to update a user's access token, updating an expired access token
+     *
+     * @param string $environment - Environment (PRODUCTION | SANDBOX)
+     * @param string $refreshToken - Refresh token
+     * @param array<string> $scopes - Array of scopes for which to generate the token
+     * @return string|null - Returns new access token in JSON string form on success, or null on failure
+     */
     public function getAccessToken($environment, $refreshToken = null, $scopes = ['https://api.ebay.com/oauth/api_scope'])
     {
         $token = $refreshToken ?: $this->getRefreshToken();
@@ -87,21 +131,43 @@ class EbayOauthToken
         return postRequest($data, $this->credentials[$environment]);
     }
 
+    /**
+     * Sets the refresh token value on this instance
+     *
+     * @param string $refreshToken
+     * @return string - Returns the newly set refresh token value
+     */
     public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
+        return $this->refreshToken;
     }
 
+    /**
+     * Get the current refresh token value of this instance
+     *
+     * @return string - Returns the current refresh token
+     */
     public function getRefreshToken()
     {
         return $this->refreshToken;
     }
 
+    /**
+     * Gets the credentials array for this instance
+     *
+     * @return array<mixed> - Returns the current credentials array
+     */
     public function getCredentials()
     {
         return $this->credentials;
     }
 
+    /**
+     * Get the grant type for this instance
+     *
+     * @return string - Returns the current grant type
+     */
     public function getGrantType()
     {
         return $this->grantType;
