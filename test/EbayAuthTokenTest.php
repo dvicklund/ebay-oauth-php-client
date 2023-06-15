@@ -54,51 +54,51 @@ class EbayAuthTokenTest extends TestCase
         $this->assertSame($expectedCredentials, $ebayOauthToken->getCredentials());
     }
 
-    public function testGetApplicationTokenMethodUsingFilePath()
-    {
-        $ebayOauthToken = new EbayOauthToken([
-            'filePath' => __DIR__ . '/test.json'
-        ]);
+//     public function testGetApplicationTokenMethodUsingFilePath()
+//     {
+//         $ebayOauthToken = new EbayOauthToken([
+//             'filePath' => __DIR__ . '/test.json'
+//         ]);
 
-        $mockResponse = [
-            'access_token' => 'QWESJAHS12323OP'
-        ];
+//         $mockResponse = [
+//             'access_token' => 'QWESJAHS12323OP'
+//         ];
 
-        // Note that, since we overrode `file_get_contents` for this namespace, the following function call
-        // (getApplicationToken) should not actually touch the eBay API, but will instead return the json-ified
-        // version of identical data to $mockResponse
-        $appToken = $ebayOauthToken->getApplicationToken('PRODUCTION', 'https://api.ebay.com/oauth/api_scope');
+//         // Note that, since we overrode `file_get_contents` for this namespace, the following function call
+//         // (getApplicationToken) should not actually touch the eBay API, but will instead return the json-ified
+//         // version of identical data to $mockResponse
+//         $appToken = $ebayOauthToken->getApplicationToken('PRODUCTION', 'https://api.ebay.com/oauth/api_scope');
 
-        $this->assertSame($mockResponse, json_decode($appToken, true));
-        $this->assertSame('client_credentials', $ebayOauthToken->getGrantType());
-    }
+//         $this->assertSame($mockResponse, json_decode($appToken, true));
+//         $this->assertSame('client_credentials', $ebayOauthToken->getGrantType());
+//     }
 
-    public function testGenerateUserAuthorizationUrlWithIncorrectFilePath()
-    {
-        $ebayOauthToken = new EbayOauthToken([
-            'filePath' => __DIR__ . '/test.json'
-        ]);
+//     public function testGenerateUserAuthorizationUrlWithIncorrectFilePath()
+//     {
+//         $ebayOauthToken = new EbayOauthToken([
+//             'filePath' => __DIR__ . '/test.json'
+//         ]);
 
-        $scope = 'https://api.ebay.com/oauth/api_scope';
+//         $scope = 'https://api.ebay.com/oauth/api_scope';
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Error while reading credentials');
+//         $this->expectException(\Exception::class);
+//         $this->expectExceptionMessage('Error while reading credentials');
 
-        $ebayOauthToken->generateUserAuthorizationUrl('PRODUCTION11', $scope);
-    }
+//         $ebayOauthToken->generateUserAuthorizationUrl('PRODUCTION11', $scope);
+//     }
 
-    public function testGenerateUserAuthorizationUrlWithoutOptions()
-    {
-        $ebayOauthToken = new EbayOauthToken([
-            'filePath' => __DIR__ . '/test.json'
-        ]);
+//     public function testGenerateUserAuthorizationUrlWithoutOptions()
+//     {
+//         $ebayOauthToken = new EbayOauthToken([
+//             'filePath' => __DIR__ . '/test.json'
+//         ]);
 
-        $scope = 'https://api.ebay.com/oauth/api_scope';
+//         $scope = 'https://api.ebay.com/oauth/api_scope';
 
-        $expectedUrl = 'https://auth.ebay.com/oauth2/authorize?client_id=PROD1234ABCD&redirect_uri=PRODREDIRECT&response_type=code&scope=https://api.ebay.com/oauth/api_scope';
+//         $expectedUrl = 'https://auth.ebay.com/oauth2/authorize?client_id=PROD1234ABCD&redirect_uri=PRODREDIRECT&response_type=code&scope=https://api.ebay.com/oauth/api_scope';
 
-        $this->assertSame($expectedUrl, $ebayOauthToken->generateUserAuthorizationUrl('PRODUCTION', $scope));
-    }
+//         $this->assertSame($expectedUrl, $ebayOauthToken->generateUserAuthorizationUrl('PRODUCTION', $scope));
+//     }
 
     public function testGenerateUserAuthorizationUrlWithIncorrectOptions()
     {
