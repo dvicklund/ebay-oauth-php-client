@@ -1,5 +1,7 @@
 # Ebay Oauth Client
 
+![Code coverage badge](https://github.com/dvicklund/ebay-oauth-php-client/blob/image-data/coverage.svg)
+
 Allows developers to fetch an OAuth token that can be used to call the eBay Developer REST APIs using PHP.
 
 ## What is OAuth
