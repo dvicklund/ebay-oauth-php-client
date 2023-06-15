@@ -17,7 +17,7 @@ jobs:
         id: coverage
         with:
           percentage: "50"
-          filename: "./clover.xml"
+          filename: "../clover.xml"
 
       - name: Generate the badge SVG image
         uses: emibcn/badge-action@v1
