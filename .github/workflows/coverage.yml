@@ -18,6 +18,14 @@ jobs:
       - name: Make code coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           coverage_badge_path: coverage.svg
-          push_badge: true
+          push_badge: false
+          
+      - name: Git push to image-data branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./image-data
+          publish_branch: image-data
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
