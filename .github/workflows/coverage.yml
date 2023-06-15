@@ -12,12 +12,15 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+      - name: Generate code coverage
+        run: ./vendor/bin/phpunit --coverage-clover ./clover.xml
+        
       - name: Check test coverage
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         id: coverage
         with:
           percentage: "50"
-          filename: "clover.xml"
+          filename: "./clover.xml"
 
       - name: Generate the badge SVG image
         uses: emibcn/badge-action@v1
