@@ -18,7 +18,7 @@ jobs:
       - name: Make code coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.1
         with:
-          coverage_badge_path: coverage.svg
+          coverage_badge_path: image-data/coverage.svg
           push_badge: false
           
       - name: Git push to image-data branch
