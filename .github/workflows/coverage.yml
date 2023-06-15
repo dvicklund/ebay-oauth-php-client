@@ -23,6 +23,8 @@ jobs:
         with: 
           php_extensions: xdebug
           coverage_clover: clover.xml
+        env:
+          XDEBUG_MODE: coverage
       
       - name: Make code coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.1
