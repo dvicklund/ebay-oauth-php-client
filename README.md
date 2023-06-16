@@ -21,6 +21,7 @@ Create a new instance of `EbayAuthToken` with a relevant config.
 use EbayOauthToken\EbayOauthToken;
 
 $ebayAuthToken = new EbayOauthToken([
+    'env' => '<SANDBOX|PRODUCTION>', // If not provided, env defaults to PRODUCTION
     'clientId' => '<your_client_id>',
     'clientSecret' => '<your_client_secret>',
     'redirectUri' => '<redirect uri>'
