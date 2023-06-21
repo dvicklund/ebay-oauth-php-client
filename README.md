@@ -121,6 +121,7 @@ There are two types of tokens you will need to use.
 
 ### Application Token
 An application token contains an application identity which is generated using client_credentials grant type. These application tokens are useful for interaction with application specific APIs such as usage statistics, etc.
+
 ### User Token
 A user token (access token or refresh token) contains a user identity and the application’s identity. This is usually generated using the authorization_code grant type or the refresh_token grant type.
 
@@ -138,10 +139,10 @@ Read more about this grant type at [oauth-authorization-code-grant](https://deve
 
 ### Refresh Token
 
-This grant type can be performed by simply using ```$ebayAuthToken->getAccessToken($environment, $refreshToken, $scopes)```. Usually access tokens are short lived and if the access token is expired, the caller can use the refresh token to generate a new access token. Read more about it at [Using a refresh token to update a user access token](https://developer.ebay.com/api-docs/static/oauth-auth-code-grant-request.html)
+This grant type can be performed by simply using ```$ebayAuthToken->getAccessToken($environment, $refreshToken, $scopes)```.  Usually, access tokens are short lived.  If the access token is expired, the caller can use the refresh token to generate a new access token.  Read more about [using a refresh token to update a user access token](https://developer.ebay.com/api-docs/static/oauth-auth-code-grant-request.html)
 
 ## Questions/problems?
-you've found an bug/issue, please file it on [GitHub](https://github.com/dvicklund/ebay-oauth-php-client/issues).
+If you have found a bug/issue, please file it on [GitHub](https://github.com/dvicklund/ebay-oauth-php-client/issues).
 
 ## References
 
@@ -156,7 +157,7 @@ you've found an bug/issue, please file it on [GitHub](https://github.com/dvicklu
 ## License 
 Copyright (c) 2023 David Vicklund.
 
-Use of this source code is governed by a Apache-2.0 license that can be found in the LICENSE file or at https://opensource.org/licenses/Apache-2.0.
+Use of this source code is governed by an Apache-2.0 license that can be found in the LICENSE file or at https://opensource.org/licenses/Apache-2.0.
 
 ## Useful links
 
