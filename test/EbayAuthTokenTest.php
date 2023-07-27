@@ -168,7 +168,7 @@ class EbayAuthTokenTest extends TestCase
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Scopes is required');
-        $ebayOauthToken->getAccessToken('SANDBOX', 'XXYYZZ1234', null);
+        $ebayOauthToken->generateUserAuthorizationUrl('PRODUCTION', null);
     }
 
     public function testValidateParamsWithoutCredentialsShouldFail() 
@@ -214,9 +214,20 @@ class EbayAuthTokenTest extends TestCase
         $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Refresh token is required, to generate refresh token use exchangeCodeForAccessToken method");
+        $this->expectExceptionMessage("Refresh token is required - to generate refresh token use exchangeCodeForAccessToken method");
 
         $ebayOauthToken->getAccessToken('PRODUCTION', null);
+    }
+
+    public function testGetAccessTokenWithNullScopes()
+    {
+        $ebayOauthToken = new EbayOauthToken(['filePath' => __DIR__.'/test.json']);
+
+        $res = $ebayOauthToken->getAccessToken('PRODUCTION', 'XXYYZZ1234', null);
+
+        $this->assertNotEmpty($res);
+
+        $this->assertEquals('QWESJAHS12323OP', json_decode($res)->access_token);
     }
 
     public function testSetRefreshToken()
