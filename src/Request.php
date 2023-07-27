@@ -13,6 +13,7 @@ function postRequest(string $data, array $ebayAuthToken): string|null
                         "Content-Type: application/x-www-form-urlencoded\r\n" .
                         "authorization: {$auth}\r\n",
             'method' => 'POST',
+            'ignore_errors' => true,
             'content' => $data
         ]
     ];
