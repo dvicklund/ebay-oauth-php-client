@@ -113,6 +113,9 @@ class EbayOauthToken
 
     /**
      * Uses a refresh token to update a user's access token, updating an expired access token
+     * 
+     * NOTE: we do not include a scopes collection, as the original refresh token should have a 
+     * pre-determined set of scopes.  Including scopes at this point seems to return an error from eBay.
      *
      * @param string $environment - Environment (PRODUCTION | SANDBOX)
      * @param string $refreshToken - Refresh token
@@ -122,12 +125,15 @@ class EbayOauthToken
     public function getAccessToken($environment, $refreshToken = null, $scopes = ['https://api.ebay.com/oauth/api_scope'])
     {
         $token = $refreshToken ?: $this->getRefreshToken();
-        validateParams($environment, $scopes, $this->credentials);
+        // This is a bit hacky - the string "refresh" fools the validateParams function into thinking that the
+        // scopes are included, but we want to allow them to be null in this case.
+        validateParams($environment, "refresh", $this->credentials);
         $this->scope = is_array($scopes) ? implode(' ', $scopes) : $scopes;
+        $scopeUrlString = $scopes == null ? "" : "&scope={$this->scope}";
         if (!$token) {
-            throw new \Exception('Refresh token is required, to generate refresh token use exchangeCodeForAccessToken method');
+            throw new \Exception('Refresh token is required - to generate refresh token use exchangeCodeForAccessToken method');
         }
-        $data = "refresh_token={$token}&grant_type=refresh_token&scope={$this->scope}";
+        $data = "refresh_token={$token}&grant_type=refresh_token{$scopeUrlString}";
         return postRequest($data, $this->credentials[$environment]);
     }
 
